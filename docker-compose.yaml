@@ -1,0 +1,26 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    container_name: clickhouse-app
+    environment:
+      - NODE_ENV=development
+      - PORT=5000
+    ports:
+      - "5000:5000"
+    depends_on:
+      - clickhouse
+    volumes:
+      - .:/app
+
+  clickhouse:
+    image: clickhouse/clickhouse-server:latest
+    container_name: clickhouse-server
+    ports:
+      - "8123:8123" # HTTP port za komunikaciju sa ClickHouse-om
+      - "9000:9000" # TCP port za komunikaciju
+    volumes:
+      - clickhouse-data:/var/lib/clickhouse
+
+volumes:
+  clickhouse-data:
